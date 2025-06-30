@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head><title>XSS Test</title></head>
+    <!--A **CSP header** (Content Security Policy header) is an HTTP response header that helps protect web applications from attacks like Cross-Site Scripting (XSS) and data injection. It allows you to specify which sources of content (scripts, styles, images, etc.) are trusted and can be loaded by the browser.
+
+    **Example:**
+    ```
+    Content-Security-Policy: default-src 'self'; script-src 'self' https://trusted.cdn.com
+    ```
+    This policy only allows scripts from the same origin and from `trusted.cdn.com`.
+
+    **Benefits:**
+    - Reduces XSS risks by blocking untrusted scripts.
+    - Controls where resources can be loaded from.
+    - Helps enforce secure coding practices.
+
+    You set the CSP header in your server configuration or application code.-->
+    <!-- Example of a CSP header -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+  <title>XSS Test</title>
+</head>  
+<body>
+  <h1>Search Results</h1>
+  <p>You searched for: <span id="output"></span></p>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const query = params.get("q");
+    //vulnerable to XSS if 'query' is not sanitized
+    // For demonstration purposes, we are directly inserting the query into the HTML.
+    document.getElementById("output").innerHTML = query; 
+   // document.getElementById("output").innerText = query; // This is a safer alternative, but still not ideal for XSS prevention.
+    //TO FIX AS A PREVENTION MEASURE:
+    // Use textContent to prevent XSS
+    //document.getElementById("output").textContent = query;
+
+    /*
+    Open it in your browser
+    Now try this URL in your browser (after opening the file):
+
+    file:///path-to-your/xss-test.html?q=hello
+
+    It’ll say: > You searched for: hello
+
+    But now try:
+
+    file:///path-to-your/xss-test.html?q=<script>alert('XSS')
+    
+    It’ll execute the script and show an alert box with "XSS".
+    */
+    // Note: This is a demonstration of a vulnerability. In production code, always sanitize user input
+    // and use secure methods to handle dynamic content.
+
+    //Avoid eval and innerHTML(use textContent instead or Innertext for text nodes).
+    
+    //Do not use eval() or assign untrusted content to innerHTML or similar APIs.
+
+
+    //Never ever ever ever ever trust user input in HTML, always sanitize it.
+  </script>
+</body>
+</html>

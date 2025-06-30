@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Input Validation Form</title>
+    <style>
+        .error { color: red; font-size: 0.9em; }
+        .form-group { margin-bottom: 1em; }
+    </style>
+</head>
+<body>
+    <h2>Registration Form</h2>
+    <form id="myForm" novalidate>
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name">
+            <div id="nameError" class="error"></div>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email">
+            <div id="emailError" class="error"></div>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+    <p>Note: This form includes basic validation to prevent SQL injection attacks.</p>
+    <p>Enter a name and email address. The form will validate the inputs and display error messages for invalid entries.</p>
+    <p>Common SQL injection patterns are checked, such as single quotes, double dashes, semicolons, and common SQL keywords.</p>
+    <p>For example, entering "O'Reilly" or "admin' OR '1'='1" in the name field will trigger an error.</p>
+    <p>Try "'or'='"</p>
+    <br>
+    <p>Yes, Hackers can remove scripts on the Client. In obfuscated code it becomes an extra step for them, following defense in depth</p>
+    <script>
+        //The MOST IMPORTANT thing to note about client-side validation is that it can be STRIPPED.
+        const form = document.getElementById('myForm');
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const nameError = document.getElementById('nameError');
+        const emailError = document.getElementById('emailError');
+
+        // Function to check for common SQL injection patterns
+        function containsSQLInjection(value) {
+            // Basic patterns: single quote, double dash, semicolon, or common SQL keywords
+            const pattern = /('|--|;|\/\*|\*\/|\b(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|OR|AND)\b)/i;
+            return pattern.test(value);
+        }
+
+        form.addEventListener('submit', function(event) {
+            let valid = true;
+            nameError.textContent = '';
+            emailError.textContent = '';
+
+            // Name validation
+            if (nameInput.value.trim() === '') {
+                nameError.textContent = 'Name is required.';
+                valid = false;
+            } else if (containsSQLInjection(nameInput.value)) {
+                nameError.textContent = 'Invalid characters detected in name.';
+                valid = false;
+            }
+
+            // Email validation
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(emailInput.value.trim())) {
+                emailError.textContent = 'Please enter a valid email address.';
+                valid = false;
+            } else if (containsSQLInjection(emailInput.value)) {
+                emailError.textContent = 'Invalid characters detected in email.';
+                valid = false;
+            }
+
+            if (!valid) {
+                event.preventDefault(); //Prevents the browser from submitting the form and reloading the page if the validation fails. 
+                                        //Displays error messages and keep the user on the same page until the input is valid.
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!-- Injects user input directly -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Input Validation Form</title>
+ 
+    <script>
+        function inject(){
+            const userInput = "<img src=x onerror=alert('XSS')>";
+            document.getElementById("output").innerHTML = userInput;
+        }
+      //this attempt failes as there is MANY browser protections against this attack.
+    </script>
+</head>
+<body onload="inject">
+
+<div id="output"></div>
+
+</body>
+</html>

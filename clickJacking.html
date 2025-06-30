@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clickjacking Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .overlay {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            width: 400px;
+            height: 300px;
+            border: 2px solid #333;
+            background: #fff;
+            z-index: 1;
+            padding: 20px;
+        }
+        .iframe-container {
+            position: absolute;
+            top: 60px;
+            left: 60px;
+            width: 400px;
+            height: 300px;
+            opacity: 0.1; /* Makes the iframe almost invisible */
+            z-index: 2;
+            pointer-events: auto;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Clickjacking Demonstration</h1>
+    <p>This page demonstrates how clickjacking works by overlaying an invisible iframe over a button.</p>
+    <div class="overlay">
+        <button>Click Me!</button>
+    </div>
+    <div class="iframe-container">
+        <!-- Replace the src with a real target for a real demo -->
+        <iframe src="https://www.example.com"></iframe>
+    </div>
+    <p style="color: red;"><strong>Warning:</strong> This is for educational purposes only.</p>
+</body>
+</html>

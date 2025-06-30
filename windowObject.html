@@ -1,0 +1,60 @@
+<!--create a webpage that demonstrates the use of the `window` object in JavaScript. The page should include: -->
+<!-- window.open and window.opener can be used maliciously-->
+<!-- You are supposed to see this error instead of being redirected Location SHOULD BE null. Uncaught TypeError: Cannot read properties of null (reading 'location')
+    at evilScript-->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Window Object Demo</title>
+
+<script>
+        
+        // Example of using window object methods
+       window.onload = function evilScript(){
+            console.log("This evil script will attempt to redirect to Google. instead of a malicious site, we will redirect to Google.");
+            window.opener.location.href = "https://google.com";
+            
+            alert("This is an evil script that changes the opener's location to Google.");
+        }
+        // Example of using window.open
+        const newWindow = window.open("https://www.example.com", "_blank", "width=600,height=400");
+        if (newWindow) {
+            console.log("New window opened successfully.");
+        } else {
+            console.log("Failed to open new window. It might be blocked by a popup blocker.");
+        }
+        // Example of using window.localStorage
+        window.localStorage.setItem('demoKey', 'This is a demo value');
+        const storedValue = window.localStorage.getItem('demoKey');
+        console.log("Stored Value:", storedValue);
+        // Example of using window.sessionStorage
+        window.sessionStorage.setItem('sessionDemoKey', 'This is a session demo value');
+        const sessionStoredValue = window.sessionStorage.getItem('sessionDemoKey');
+        console.log("Session Stored Value:", sessionStoredValue);
+       
+        
+    </script>
+
+</head>
+<body>
+    <h1>Demonstrating the JavaScript Window Object</h1>
+
+    <!-- Putting these in your links will protect the user-->
+    <a href="https://example.com" rel="noopener noreferrer" target="_blank">Visit Example</a>
+    <!--- nofollow tells search engines not to follow the link or pass any SEO value (link juice) to the target page. It's often used for untrusted or paid links.
+        - noreferrer prevents the browser from sending the HTTP referrer header when the link is clicked. This means the destination site won’t know where the visitor came from.
+        -noopener is a security feature that prevents the new page from being able to access the window.opener property, which can be exploited by malicious sites to manipulate the original page.
+
+This combination is especially useful when linking to external sites you don’t control, as it enhances both SEO control and privacy/security. If you're also concerned about preventing the new page from accessing the window.opener object (which can be a security risk), you might consider adding noopener as well
+    If a malicious site is opened in a new tab or window, and rel="noopener" is not used, that site can:
+        
+        - Redirect the original page using window.opener.location = 'https://phishing-site.com', tricking users into thinking they’re still on the trusted site.
+        - Manipulate the DOM of the opener window (if same-origin), potentially injecting scripts or altering content.
+        - Steal sensitive data if the opener window contains user information and both pages share the same origin
+
+
+-->
+
+    </div>
+</body>
+</html>
