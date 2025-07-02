@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+   
+
+</head>
+<body>
+    <h1>The purpouse of this program is to demonstrate how a "memomry leak" or wasted memory can happen in Javascript. Javascript will run even with errors which allows bad coders to be bad coders. Examples include out of bounds indexes and wasted memory.</h1>
+    <h2>Values in Array 1</h2>
+    <div id="output1"></div>
+    <h2>Values in Array 2</h2>
+    <div id="output2"></div>
+
+    <div id="outputMemeLeak"></div>
+    <button id="grow">very time that the button referenced in the code is clicked, a string of one million characters is added to the x array. </button>
+    <button id="create">Create</button>
+
+     <script>
+        //https://learn.microsoft.com/en-us/microsoft-edge/devtools-guide-chromium/memory-problems/#discover-detached-dom-tree-memory-leaks-with-heap-snapshots
+        //Internet Programming book
+        function start(){
+            var array1 = [  [1, 2, 3], //row 0
+                            [4, 5, 6 ]]; //row 1
+
+            var array2 = [  [1, 2], //row 0
+                            [3],   //row 1
+                            [4, 5, 6] ]; //row 2
+
+            outOfBounds(array1);
+
+            outputArrays("values in array1 by row", array1, document.getElementById("output1"));
+            outputArrays("values in array2 by row", array2, document.getElementById("output2"));
+			
+			
+        }
+
+        function outOfBounds(theArray){
+            var i = 5;
+            var q = 9;
+            theArray[i] = 77;
+            theArray[q] = 69;
+            
+            var data = "<h1>When you assign a value out of bounds of an array.</h1><h3>"
+                 + theArray[i] + ' ';
+
+                for(var j = 0; j < 10; j++){
+                    data += theArray[j] + "<br>";
+                }
+                
+            data += theArray[q] + "</h3>";
+            outputMemeLeak.innerHTML = data;
+
+        } //end outOfBounds()
+
+        function outputArrays(heading, theArray, output){
+            var results = "";
+
+            //iterates through one dimensional arrays
+            for( var row in theArray)
+            {
+                results += "<ol>"; // start ordered list
+                
+                //iterates through each element in one dimensional array
+                for(var column in theArray[row])
+                {
+                    results += "<li>" + theArray[row][column] + "</li>";
+                } //end inner for
+                results += "</ol>";
+            } //end outer for
+
+            //salted
+            theArray[5] = 77;
+            
+            output.innerHTML = results;
+
+        } //end function
+
+
+        //
+        var detachedTree;
+
+        function create() {
+            var ul = document.createElement('ul');
+            for (var i = 0; i < 10; i++) {
+                var li = document.createElement('li');
+                ul.appendChild(li);
+            }
+            detachedTree = ul;
+        }
+        document.getElementById('create').addEventListener('click', create);
+
+        //allocation leak - we do not need this much memory.
+        var arrayLeak = [];
+        function grow() {
+         arrayLeak.push(new Array(1000000).join('arrayLeak'));
+         console.log("you just allocated 1 million strings to an array that is not used and does not need 1 million elements")
+        }
+        document.getElementById('grow').addEventListener('click', grow);
+
+        window.addEventListener("load", start, false);
+    </script>
+</body>
+</html>
